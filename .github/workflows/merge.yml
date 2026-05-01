@@ -1,0 +1,24 @@
+name: Merge
+
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TZ: Asia/Shanghai
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: 自动合并 Dependabot 的 PR
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr merge -ds --auto "$PR_URL"
