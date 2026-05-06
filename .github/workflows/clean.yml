@@ -34,10 +34,10 @@ jobs:
         run: |
           [[ $OWNER_TYPE == Organization ]] && api_base=orgs || api_base=users
 
-          run_cnt=$(gh run list -L 2 --json databaseId -q length || echo 0)
-          rel_cnt=$(gh release list -L 1 --json tagName -q length || echo 0)
+          run_cnt=$(gh run list -L 2 --json databaseId -q length)
+          rel_cnt=$(gh release list -L 1 --json tagName -q length)
           pkg_raw=$(gh api "/$api_base/$REPO_OWNER/packages?package_type=container" --paginate \
-            -q '.[] | select(.repository.name == env.REPO_NAME) | .name' | sort -f || :)
+            -q '.[] | select(.repository.name == env.REPO_NAME) | .name' | sort -f)
 
           if [[ $pkg_raw ]]; then
             mapfile -t pkg_arr <<<"$pkg_raw"
